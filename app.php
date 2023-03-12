@@ -178,3 +178,26 @@ if ('deleteitemtbyid' == $action) {
     }
     $conn->close();
 }
+
+
+if ("addorder" == $action) {
+    // App will be posting these values to this server
+    try {
+        $userid = $_POST["userid"];
+        $currentUserId = $userid;
+        $sql = "SELECT item_id FROM cart WHERE user_id = '$currentUserId' ";
+        $result = $conn->query($sql);
+
+        foreach (mysqli_fetch_assoc($result) as $row) {
+            $itemId = $row['item_id'];
+            $sql1 = "INSERT INTO orders (item_id,order_date_time,quantity,order_by) VALUES ('$itemId', NOW() ,'1','$currentUserId')";
+            $result = $conn->query($sql1);
+        }
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
+    }
+    // Select all item IDs of the current user from the cart table
+    echo "success";
+    $conn->close();
+    return;
+}
