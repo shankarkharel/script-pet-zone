@@ -187,11 +187,14 @@ if ("addorder" == $action) {
         $currentUserId = $userid;
         $sql = "SELECT item_id FROM cart WHERE user_id = '$currentUserId' ";
         $result = $conn->query($sql);
-
-        foreach (mysqli_fetch_assoc($result) as $row) {
-            $itemId = $row['item_id'];
-            $sql1 = "INSERT INTO orders (item_id,order_date_time,quantity,order_by) VALUES ('$itemId', NOW() ,'1','$currentUserId')";
+        $i = 3;
+        while ($i == 1) {
+            $row = mysqli_fetch_assoc($result);
+            echo $row['itemid'];
+            $itemId = $row['itemid'];
+            $sql1 = "INSERT INTO `orders` (item_id,order_date_time,quantity,order_by) VALUES ('$itemId', NOW() ,'1','$currentUserId')";
             $result = $conn->query($sql1);
+            $i = $i - 1;
         }
     } catch (Exception $e) {
         echo 'Caught exception: ',  $e->getMessage(), "\n";
