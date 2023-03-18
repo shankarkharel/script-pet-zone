@@ -179,28 +179,25 @@ if ('deleteitemtbyid' == $action) {
     $conn->close();
 }
 
+if ('deleteorderbyid' == $action) {
+    // $patientid = $_POST("patientid");
+    $patientid = $_POST["emp_id"];
 
-if ("addorder" == $action) {
-    // App will be posting these values to this server
-    try {
-        $userid = $_POST["userid"];
-        $currentUserId = $userid;
-        $sql = "SELECT item_id FROM cart WHERE user_id = '$currentUserId' ";
-        $result = $conn->query($sql);
-        $i = 3;
-        while ($i == 1) {
-            $row = mysqli_fetch_assoc($result);
-            echo $row['itemid'];
-            $itemId = $row['itemid'];
-            $sql1 = "INSERT INTO `orders` (item_id,order_date_time,quantity,order_by) VALUES ('$itemId', NOW() ,'1','$currentUserId')";
-            $result = $conn->query($sql1);
-            $i = $i - 1;
+
+
+
+    $sql = "DELETE FROM orders WHERE item_id='$patientid'";
+    $db_data = array();
+
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $db_data[] = $row;
         }
-    } catch (Exception $e) {
-        echo 'Caught exception: ',  $e->getMessage(), "\n";
+        // Send back the complete records as a json
+        echo json_encode($db_data);
+    } else {
+        echo "error";
     }
-    // Select all item IDs of the current user from the cart table
-    echo "success";
     $conn->close();
-    return;
 }
